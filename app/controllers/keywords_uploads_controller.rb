@@ -3,7 +3,7 @@ class KeywordsUploadsController < ApplicationController
 
   # GET /keywords_uploads or /keywords_uploads.json
   def index
-    @keywords_uploads = KeywordsUpload.all
+    @keywords_uploads = current_user.keywords_uploads.all
   end
 
   # GET /keywords_uploads/1 or /keywords_uploads/1.json
@@ -12,7 +12,7 @@ class KeywordsUploadsController < ApplicationController
 
   # GET /keywords_uploads/new
   def new
-    @keywords_upload = KeywordsUpload.new
+    @keywords_upload = current_user.keywords_uploads.new
   end
 
   # GET /keywords_uploads/1/edit
@@ -21,7 +21,7 @@ class KeywordsUploadsController < ApplicationController
 
   # POST /keywords_uploads or /keywords_uploads.json
   def create
-    @keywords_upload = KeywordsUpload.new(keywords_upload_params)
+    @keywords_upload = current_user.keywords_uploads.new(keywords_upload_params)
 
     respond_to do |format|
       if @keywords_upload.save
@@ -65,6 +65,6 @@ class KeywordsUploadsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def keywords_upload_params
-      params.expect(keywords_upload: [ :status, :user_id ])
+      params.expect(keywords_upload: [ :csv_file ])
     end
 end

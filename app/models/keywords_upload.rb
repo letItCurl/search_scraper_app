@@ -2,6 +2,8 @@ class KeywordsUpload < ApplicationRecord
   belongs_to :user
 
   enum :status, [ :pending, :processing, :completed, :failed ]
+
+  has_one_attached :csv_file
 end
 
 # == Schema Information
