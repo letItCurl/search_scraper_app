@@ -6,9 +6,13 @@ class Keyword::ProcessingJob < ApplicationJob
   # Retry only on this specific error, up to 3 times with exponential backoff
   retry_on Ferrum::NodeNotFoundError, wait: :exponentially_longer, attempts: 3
 
-  def perform(user_id:, keyword:)
-    user = User.find(user_id)
-    keyword_record = user.keywords.create!(name: keyword, status: :processing)
+  def perform(keyword_id: nil, user_id: nil, keyword: nil)
+    if keyword_id.nil?
+      user = User.find(user_id)
+      @keyword = user.keywords.create!(name: keyword, status: :processing)
+    else
+      @keyword = Keyword.find(keyword_id)
+    end
 
     browser = Ferrum::Browser.new(
       headless: true,
@@ -39,7 +43,7 @@ class Keyword::ProcessingJob < ApplicationJob
       total_ads += browser.css('div.mma_acf_label_container > span').count
 
 
-      keyword_record.update!(
+      @keyword.update!(
         total_links: total_links,
         total_ads: total_ads,
         html_cache: html_cache,
@@ -50,7 +54,7 @@ class Keyword::ProcessingJob < ApplicationJob
         browser.screenshot(path: "tmp/debug_#{keyword.parameterize}.png")
       end
 
-      keyword_record.update(status: :failed, failure_reason: e.message)
+      @keyword.update(status: :failed, failure_reason: e.message)
       Rails.logger.error "Failed to process keyword: #{keyword} - #{e.class}: #{e.message}"
       raise e
     ensure

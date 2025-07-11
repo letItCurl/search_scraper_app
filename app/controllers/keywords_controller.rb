@@ -21,6 +21,7 @@ class KeywordsController < ApplicationController
 
     respond_to do |format|
       if @keyword.save
+        Keyword::ProcessingJob.perform_later(keyword_id: @keyword.id)
         format.html { redirect_to @keyword, notice: "Keyword was successfully created." }
         format.json { render :show, status: :created, location: @keyword }
       else
