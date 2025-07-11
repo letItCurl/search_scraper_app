@@ -13,10 +13,18 @@
   </div>
   <div>
     <strong class="block font-medium mb-1">Html cache:</strong>
-    <%= keyword.html_cache %>
+    <%# should be a collaps somehow %>
+    <% keyword.html_cache %>
   </div>
   <div>
-    <strong class="block font-medium mb-1">User:</strong>
-    <%= keyword.user_id %>
+    <strong class="block font-medium mb-1">Status:</strong>
+    <%= keyword.status %>
   </div>
+
+  <% if keyword.status == :failure %>
+    <div>
+      <strong class="block font-medium mb-1">Status:</strong>
+      <%= keyword.status %>
+    </div>
+  <% end %>
 </div>

@@ -5,6 +5,8 @@ class CreateKeywords < ActiveRecord::Migration[8.0]
       t.integer :total_ads
       t.integer :total_links
       t.text :html_cache
+      t.integer :status, default: 0
+      t.string :failure_reason
       t.references :user, null: false, foreign_key: true, type: :uuid
 
       t.timestamps

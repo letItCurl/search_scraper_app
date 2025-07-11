@@ -4,6 +4,13 @@ class KeywordsUpload < ApplicationRecord
   enum :status, [ :pending, :processing, :completed, :failed ]
 
   has_one_attached :csv_file
+  after_create :start_processing_job
+
+  private
+
+    def start_processing_job
+      KeywordsUpload::ProcessingJob.perform_later(keywords_upload_id: self.id)
+    end
 end
 
 # == Schema Information

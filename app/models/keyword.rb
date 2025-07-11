@@ -1,5 +1,7 @@
 class Keyword < ApplicationRecord
   belongs_to :user
+
+  enum :status, [ :pending, :processing, :completed, :failed ]
 end
 
 # == Schema Information

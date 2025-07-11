@@ -48,6 +48,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_11_072239) do
     t.integer "total_ads"
     t.integer "total_links"
     t.text "html_cache"
+    t.integer "status", default: 0
+    t.string "failure_reason"
     t.uuid "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

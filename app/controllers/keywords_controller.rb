@@ -3,7 +3,7 @@ class KeywordsController < ApplicationController
 
   # GET /keywords or /keywords.json
   def index
-    @keywords = Keyword.all
+    @keywords = current_user.keywords.all
   end
 
   # GET /keywords/1 or /keywords/1.json
@@ -12,7 +12,7 @@ class KeywordsController < ApplicationController
 
   # GET /keywords/new
   def new
-    @keyword = Keyword.new
+    @keyword = current_user.keywords.new
   end
 
   # GET /keywords/1/edit
@@ -21,7 +21,7 @@ class KeywordsController < ApplicationController
 
   # POST /keywords or /keywords.json
   def create
-    @keyword = Keyword.new(keyword_params)
+    @keyword = current_user.keywords.new(keyword_params)
 
     respond_to do |format|
       if @keyword.save
