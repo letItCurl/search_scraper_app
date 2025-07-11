@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :keywords_uploads
+  resources :keywords
   devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -11,4 +13,5 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Defines the root path route ("/")
+  root to: "keywords#index"
 end

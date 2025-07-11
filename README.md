@@ -23,5 +23,5 @@ Things you may want to cover:
 
 * ...
 
-rails g scaffold ::Search status:integer user:reference
-rails g scaffold ::Keyword name:string total_ads:integer total_links:integer html_cache:text search:reference
+rails g scaffold Keywords::Upload status:integer user:references
+rails g scaffold Keyword name:string total_ads:integer total_links:integer html_cache:text user:references
