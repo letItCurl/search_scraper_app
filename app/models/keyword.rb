@@ -2,6 +2,13 @@ class Keyword < ApplicationRecord
   belongs_to :user
 
   enum :status, [ :pending, :processing, :completed, :failed ]
+
+  validates :name, presence: true
+
+  def bing_url
+    query = URI.encode_www_form_component(self.name)
+    url = "https://www.bing.com/search?q=#{query}"
+  end
 end
 
 # == Schema Information

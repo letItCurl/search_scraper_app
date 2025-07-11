@@ -6,11 +6,26 @@ class KeywordsUpload < ApplicationRecord
   has_one_attached :csv_file
   after_create :start_processing_job
 
+  validate :csv_file_presence
+  validate :csv_file_format
+
   private
 
-    def start_processing_job
-      KeywordsUpload::ProcessingJob.perform_later(keywords_upload_id: self.id)
+  def csv_file_presence
+    errors.add(:csv_file, "must be attached") unless csv_file.attached?
+  end
+
+  def csv_file_format
+    return unless csv_file.attached?
+
+    if !csv_file.filename.to_s.ends_with?(".csv")
+      errors.add(:csv_file, "must be a CSV file")
     end
+  end
+
+  def start_processing_job
+    KeywordsUpload::ProcessingJob.perform_later(keywords_upload_id: self.id)
+  end
 end
 
 # == Schema Information

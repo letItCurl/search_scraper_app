@@ -1,10 +1,9 @@
 require 'ferrum'
+require 'async'
 
 class Keyword::ProcessingJob < ApplicationJob
+  SAMPLE_SIZE = 10
   queue_as :default
-
-  # Retry only on this specific error, up to 3 times with exponential backoff
-  retry_on Ferrum::NodeNotFoundError, wait: :exponentially_longer, attempts: 3
 
   def perform(keyword_id: nil, user_id: nil, keyword: nil)
     if keyword_id.nil?
@@ -14,51 +13,67 @@ class Keyword::ProcessingJob < ApplicationJob
       @keyword = Keyword.find(keyword_id)
     end
 
-    browser = Ferrum::Browser.new(
-      headless: true,
-      timeout: 30,
-      browser_options: {
-        'no-sandbox': nil,
-        'disable-gpu': nil
-      }
-    )
+    url = @keyword.bing_url
 
-    query = URI.encode_www_form_component(keyword)
-    url = "https://www.bing.com/search?q=#{query}"
+    total_links_samples = []
+    total_ads_samples = []
+    html_snapshots = []
 
-    begin
-      browser.go_to(url)
+    Async do |task|
+      tasks = SAMPLE_SIZE.times.map do
+        task.async do
+          browser = Ferrum::Browser.new(
+            headless: true,
+            timeout: 30,
+            browser_options: {
+              'no-sandbox': nil,
+              'disable-gpu': nil
+            }
+          )
 
-      browser.network.wait_for_idle
+          begin
+            browser.go_to(url)
+            browser.network.wait_for_idle
 
-      html_cache = browser.body
+            html_snapshots << browser.body
 
-      # Count all links
-      total_links = 0
-      total_links += browser.css('a').count
+            matching_links = browser.css('a').map do |node|
+              href = node.attribute('href')
+              href if href&.start_with?("https://www.bing.com/aclick?")
+            end.compact
 
-      # Try to count ads – rough estimate based on Bing ad containers
-      total_ads = 0
-      total_ads += browser.css('div > span.b_adSlug.b_opttxt.b_divdef').count
-      total_ads += browser.css('div.mma_acf_label_container > span').count
+            total_links = matching_links.size
 
+            total_ads = browser.css('span.b_adSlug.b_opttxt.b_divdef').count +
+                        browser.css('div.mma_acf_label_container > span').count
 
-      @keyword.update!(
-        total_links: total_links,
-        total_ads: total_ads,
-        html_cache: html_cache,
-        status: :completed
-      )
-    rescue => e
-      if Rails.env.development?
-        browser.screenshot(path: "tmp/debug_#{keyword.parameterize}.png")
+            total_links_samples << total_links
+            total_ads_samples << total_ads
+          rescue => e
+            Rails.logger.error "Async scrape failed: #{e.message}"
+          ensure
+            browser.quit
+          end
+        end
       end
 
-      @keyword.update(status: :failed, failure_reason: e.message)
-      Rails.logger.error "Failed to process keyword: #{keyword} - #{e.class}: #{e.message}"
-      raise e
-    ensure
-      browser.quit
+      tasks.each(&:wait) # Wait for all async runs to complete
     end
+
+    if total_links_samples.empty? || total_ads_samples.empty?
+      @keyword.update!(status: :failed, failure_reason: "All async attempts failed.")
+      return
+    end
+
+    average_links = (total_links_samples.sum.to_f / total_links_samples.size).round
+    average_ads = (total_ads_samples.sum.to_f / total_ads_samples.size).round
+    html_cache = html_snapshots.compact.first
+
+    @keyword.update!(
+      total_links: average_links,
+      total_ads: average_ads,
+      html_cache: html_cache,
+      status: :completed
+    )
   end
 end
