@@ -22,3 +22,6 @@ Things you may want to cover:
 * Deployment instructions
 
 * ...
+
+rails g scaffold ::Search status:integer user:reference
+rails g scaffold ::Keyword name:string total_ads:integer total_links:integer html_cache:text search:reference
