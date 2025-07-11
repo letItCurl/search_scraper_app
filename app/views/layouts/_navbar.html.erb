@@ -29,7 +29,8 @@
         </div>
         <div class="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
           <% navbar_links.each_with_index do |link, i| %>
-            <a href="<%= link[:href] %>" class="inline-flex items-center border-b-2 <%= current_page?(link[:href]) ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' %> px-1 pt-1 text-sm font-medium" aria-current="<%= i == 0 ? 'page' : nil %>"><%= link[:name] %></a>
+            <% link_status = Rails.application.routes.recognize_path(request.path)[:controller] == Rails.application.routes.recognize_path(link[:href])[:controller] %>
+            <a href="<%= link[:href] %>" class="inline-flex items-center border-b-2 <%= link_status ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' %> px-1 pt-1 text-sm font-medium" aria-current="<%= i == 0 ? 'page' : nil %>"><%= link[:name] %></a>
           <% end %>
         </div>
       </div>
@@ -90,7 +91,8 @@
   <div data-navbar-target="mobileMenu" class="sm:hidden hidden" id="mobile-menu">
     <div class="space-y-1 pt-2 pb-3">
       <% navbar_links.each_with_index do |link, i| %>
-        <a href="<%= link[:href] %>" class="block border-l-4 <%= current_page?(link[:href]) ? 'border-indigo-500 bg-indigo-50 text-indigo-700' : 'border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800' %> py-2 pr-4 pl-3 text-base font-medium" aria-current="<%= i == 0 ? 'page' : nil %>"><%= link[:name] %></a>
+        <% link_status = Rails.application.routes.recognize_path(request.path)[:controller] == Rails.application.routes.recognize_path(link[:href])[:controller] %>
+        <a href="<%= link[:href] %>" class="block border-l-4 <%= link_status ? 'border-indigo-500 bg-indigo-50 text-indigo-700' : 'border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800' %> py-2 pr-4 pl-3 text-base font-medium" aria-current="<%= i == 0 ? 'page' : nil %>"><%= link[:name] %></a>
       <% end %>
     </div>
     <div class="border-t border-gray-200 pt-4 pb-3">
