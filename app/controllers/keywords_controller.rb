@@ -25,8 +25,7 @@ class KeywordsController < ApplicationController
         format.html { redirect_to @keyword, notice: "Keyword was successfully created." }
         format.json { render :show, status: :created, location: @keyword }
       else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @keyword.errors, status: :unprocessable_entity }
+        format.turbo_stream
       end
     end
   end

@@ -5,6 +5,12 @@
         <dt class="text-sm/6 font-medium text-gray-900">Status</dt>
         <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0"><%= keywords_upload.status %></dd>
       </div>
+      <% if keywords_upload.failed? %>
+        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+          <dt class="text-sm/6 font-medium text-gray-900">Failure reason</dt>
+          <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0"><%= keywords_upload.failure_reason %></dd>
+        </div>
+      <% end %>
       <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
         <dt class="text-sm/6 font-medium text-gray-900">CSV Filename</dt>
         <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 flex items-center gap-4">

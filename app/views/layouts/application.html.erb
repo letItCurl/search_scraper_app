@@ -31,6 +31,10 @@
       <%= yield %>
     </main>
 
-    <%= render 'layouts/toast' %>
+    <div id="toasts">
+      <% if flash[:notice].present? %>
+        <%= render partial: "layouts/toast", locals: { message: flash[:notice] } %>
+      <% end %>
+    </div>
   </body>
 </html>

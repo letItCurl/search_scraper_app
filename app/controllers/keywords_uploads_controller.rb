@@ -1,5 +1,5 @@
 class KeywordsUploadsController < ApplicationController
-  before_action :set_keywords_upload, only: %i[ show edit update destroy ]
+  before_action :set_keywords_upload, only: %i[ show destroy ]
 
   # GET /keywords_uploads or /keywords_uploads.json
   def index
@@ -13,10 +13,6 @@ class KeywordsUploadsController < ApplicationController
   # GET /keywords_uploads/new
   def new
     @keywords_upload = current_user.keywords_uploads.new
-  end
-
-  # GET /keywords_uploads/1/edit
-  def edit
   end
 
   # POST /keywords_uploads or /keywords_uploads.json

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_11_072239) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_11_124517) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -49,7 +49,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_11_072239) do
     t.integer "total_links"
     t.text "html_cache"
     t.integer "status", default: 0
-    t.string "failure_reason"
     t.uuid "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -61,6 +60,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_11_072239) do
     t.uuid "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "failure_reason"
     t.index ["user_id"], name: "index_keywords_uploads_on_user_id"
   end
 

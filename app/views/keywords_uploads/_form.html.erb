@@ -1,16 +1,10 @@
-<%= form_with(model: keywords_upload, class: "space-y-8") do |form| %>
-  <% if keywords_upload.errors.any? %>
-    <div id="error_explanation" class="rounded-md bg-red-50 p-4 border border-red-200">
-      <h2 class="text-sm font-semibold text-red-700">
-        <%= pluralize(keywords_upload.errors.count, "error") %> prevented this file from being uploaded:
-      </h2>
-      <ul class="mt-2 list-disc list-inside text-sm text-red-600">
-        <% keywords_upload.errors.full_messages.each do |msg| %>
-          <li><%= msg %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+<div class="px-4 sm:px-0 mb-6">
+  <h3 class="text-2xl font-semibold text-gray-900">Upload a csv file</h3>
+  <p class="mt-1 max-w-2xl text-sm/6 text-gray-500">The first column should be "keyword"<br> <a class="underline hover:text-indigo-500" href="https://docs.google.com/spreadsheets/d/14sXZHMJJhgGLTRWtv9-_lITXo0_diBqs064KjhdITjI/edit?usp=sharing">Click here to see and example as reference</a></p>
+</div>
+
+<%= form_with(model: keywords_upload, class: "space-y-8", data: { controller: "file-upload" }) do |form| %>
+  <div id="error_explanation"></div>
 
   <div class="col-span-full border-b border-gray-900/10 pb-12">
     <%= form.label :csv_file, "Upload CSV File", class: "block text-sm/6 font-medium text-gray-900" %>
@@ -60,19 +54,25 @@
           </g>
           </svg>
           <p class="mt-4 text-sm font-semibold text-indigo-600 hover:underline">Click to upload a file</p>
-          <%= form.file_field :csv_file, id: "csv_file", class: "sr-only" %>
+
+          <%= form.file_field :csv_file,
+            id: "csv_file",
+            class: "sr-only",
+            accept: ".csv",
+            data: {
+              file_upload_target: "input",
+              action: "change->file-upload#updateFileName"
+            } %>
         </label>
 
-        <p class="mt-1 text-xs/5 text-gray-600">CSV only. Max 10MB.</p>
+        <p data-file-upload-target="filename" class="mt-1 text-xs/5 text-gray-600">
+          CSV only. Max 10MB.
+        </p>
       </div>
     </div>
 
     <% if keywords_upload.errors[:csv_file].any? %>
       <p class="mt-2 text-sm text-red-600"><%= keywords_upload.errors[:csv_file].first %></p>
     <% end %>
-  </div>
-
-  <div class="flex justify-end">
-    <%= form.submit "Upload", class: "rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" %>
   </div>
 <% end %>
