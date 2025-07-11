@@ -1,10 +1,12 @@
 <% content_for :title, "Showing keyword" %>
 
 <div class="md:w-2/3 w-full">
-  <h1 class="font-bold text-4xl">Showing keyword</h1>
+  <div class="px-4 sm:px-0 mb-6">
+    <h3 class="text-2xl font-semibold text-gray-900">Keyword Info</h3>
+    <p class="mt-1 max-w-2xl text-sm/6 text-gray-500">Details about the analyzed keyword and its current status</p>
+  </div>
 
   <%= render @keyword %>
 
-  <%= link_to "Back to keywords", keywords_path, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <%= button_to "Destroy this keyword", @keyword, method: :delete, form_class: "sm:inline-block mt-2 sm:mt-0 sm:ml-2", class: "w-full rounded-md px-3.5 py-2.5 text-white bg-red-600 hover:bg-red-500 font-medium cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
+  <%= button_to "Destroy this keyword", @keyword, method: :delete, form_class: "sm:inline-block", class: "w-full rounded-md px-2.5 py-1.5 text-sm text-white bg-red-600 hover:bg-red-500 font-medium cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
 </div>

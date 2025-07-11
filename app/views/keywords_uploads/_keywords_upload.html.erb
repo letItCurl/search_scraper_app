@@ -1,10 +1,17 @@
-<div id="<%= dom_id keywords_upload %>" class="w-full sm:w-auto my-5 space-y-5">
-  <div>
-    <strong class="block font-medium mb-1">Status:</strong>
-    <%= keywords_upload.status %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">CSV Filename:</strong>
-    <%= keywords_upload.csv_file.filename %>
+<div id="<%= dom_id keywords_upload %>" class="w-full my-5">
+  <div class="mt-6 border-t border-gray-100">
+    <dl class="divide-y divide-gray-100">
+      <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+        <dt class="text-sm/6 font-medium text-gray-900">Status</dt>
+        <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0"><%= keywords_upload.status %></dd>
+      </div>
+      <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+        <dt class="text-sm/6 font-medium text-gray-900">CSV Filename</dt>
+        <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 flex items-center gap-4">
+          <%= keywords_upload.csv_file.filename %>
+          <%= link_to 'Download', rails_blob_path(keywords_upload.csv_file, disposition: "attachment"), class: "text-sm font-medium text-indigo-600 hover:text-indigo-500" %>
+        </dd>
+      </div>
+    </dl>
   </div>
 </div>
