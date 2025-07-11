@@ -1,30 +1,40 @@
-<div id="<%= dom_id keyword %>" class="w-full sm:w-auto my-5 space-y-5">
-  <div>
-    <strong class="block font-medium mb-1">Name:</strong>
-    <%= keyword.name %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Total ads:</strong>
-    <%= keyword.total_ads %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Total links:</strong>
-    <%= keyword.total_links %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Html cache:</strong>
-    <%# should be a collaps somehow %>
-    <% keyword.html_cache %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Status:</strong>
-    <%= keyword.status %>
-  </div>
-
-  <% if keyword.status == :failure %>
-    <div>
-      <strong class="block font-medium mb-1">Status:</strong>
-      <%= keyword.status %>
+<div id="<%= dom_id keyword %>" class="mt-6 border-t border-gray-100">
+  <dl class="divide-y divide-gray-100">
+    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+      <dt class="text-sm/6 font-medium text-gray-900">Keyword</dt>
+      <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0"><%= keyword.name %></dd>
     </div>
-  <% end %>
+
+    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+      <dt class="text-sm/6 font-medium text-gray-900">Total ads</dt>
+      <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0"><%= keyword.total_ads %></dd>
+    </div>
+
+    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+      <dt class="text-sm/6 font-medium text-gray-900">Total links</dt>
+      <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0"><%= keyword.total_links %></dd>
+    </div>
+
+    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+      <dt class="text-sm/6 font-medium text-gray-900">Status</dt>
+      <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0"><%= keyword.status %></dd>
+    </div>
+
+    <% if keyword.status.to_sym == :failure %>
+      <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0 bg-red-50">
+        <dt class="text-sm/6 font-medium text-red-800">Error status</dt>
+        <dd class="mt-1 text-sm/6 text-red-700 sm:col-span-2 sm:mt-0"><%= keyword.status %></dd>
+      </div>
+    <% end %>
+
+    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+      <dt class="text-sm/6 font-medium text-gray-900">HTML cache</dt>
+      <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 whitespace-pre-wrap break-words">
+        <details class="text-sm text-gray-600">
+          <summary class="cursor-pointer underline">Show raw HTML</summary>
+          <pre class="border p-2 rounded-md bg-gray-50 text-gray-500 max-h-60 overflow-auto"><%= keyword.html_cache %></pre>
+        </details>
+      </dd>
+    </div>
+  </dl>
 </div>

@@ -1,5 +1,5 @@
 class KeywordsController < ApplicationController
-  before_action :set_keyword, only: %i[ show edit update destroy ]
+  before_action :set_keyword, only: %i[ show destroy ]
 
   # GET /keywords or /keywords.json
   def index
@@ -15,10 +15,6 @@ class KeywordsController < ApplicationController
     @keyword = current_user.keywords.new
   end
 
-  # GET /keywords/1/edit
-  def edit
-  end
-
   # POST /keywords or /keywords.json
   def create
     @keyword = current_user.keywords.new(keyword_params)
@@ -29,19 +25,6 @@ class KeywordsController < ApplicationController
         format.json { render :show, status: :created, location: @keyword }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @keyword.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PATCH/PUT /keywords/1 or /keywords/1.json
-  def update
-    respond_to do |format|
-      if @keyword.update(keyword_params)
-        format.html { redirect_to @keyword, notice: "Keyword was successfully updated." }
-        format.json { render :show, status: :ok, location: @keyword }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @keyword.errors, status: :unprocessable_entity }
       end
     end

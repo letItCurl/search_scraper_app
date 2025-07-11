@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  resources :keywords_uploads
-  resources :keywords
+  resources :keywords_uploads, only: [ :index, :show, :new, :create, :destroy ]
+  resources :keywords, only: [ :index, :show, :new, :create, :destroy ]
   devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
